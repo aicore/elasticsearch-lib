@@ -3,7 +3,6 @@
   "version": "1.0.1",
   "description": "Template for nodejs with unit gulp build, test, coverage, code guardian, github and Other defaults",
   "main": "index.js",
-  "type": "module",
   "keywords": [
     "template",
     "nodejs",
@@ -41,6 +40,7 @@
   "devDependencies": {
     "@commitlint/cli": "16.1.0",
     "@commitlint/config-conventional": "16.0.0",
+    "array.prototype.flatmap": "^1.2.5",
     "c8": "7.11.0",
     "chai": "4.3.4",
     "eslint": "8.6.0",
@@ -48,5 +48,7 @@
     "mocha": "9.1.4"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^7.16.0",
+    "config": "^3.3.7"
   }
 }
