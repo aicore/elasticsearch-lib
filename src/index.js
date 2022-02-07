@@ -1,7 +1,7 @@
 /**
  * Driver file for the module, uncomment this file to test the methods
-const searchClient = require('./elasticsearch.js');
-const nodeAddress = 'INSERT_YOUR_HOST_ADDRESS';
+import searchClient from './elasticsearch.js';
+const nodeAddress = 'http://172.105.38.208:9200/';
 const indexName = 'extension_registry_beta';
 
 async function run() {
@@ -26,12 +26,17 @@ async function run() {
 
     const dataset = [
         {
-            name: 'jrowny.brackets.snippets',
-            title: 'Brackets Snippets',
-            description: 'Provides ability to use code snippets in Brackets.'
+            name: 'Theme101',
+            title: 'Brackets',
+            description: 'Provides ability to use code snippets in Brackets.',
+            homepage: 'https://github.com/jrowny/brackets-snippets',
+            author: {
+                name: 'demo',
+                email: 'test@gmail.com'
+            }
         }];
-    const bulkInsertResponse = await searchClient.bulkInsert(nodeAddress, indexName, dataset);
-    console.log("Bulk Insert Response " + JSON.stringify(bulkInsertResponse));
+     const bulkInsertResponse = await searchClient.bulkInsert(nodeAddress, indexName, dataset);
+     console.log("Bulk Insert Response " + JSON.stringify(bulkInsertResponse));
 
     const searchQuery = {
         index: indexName,

@@ -1,32 +1,179 @@
-# template-nodejs
-A template project for nodejs. Has integrated linting, testing,
+# elastic-search-lib
+Module written in nodejs to integrate easily with Elastic Search. It has additional integrations to support linting, testing,
 coverage, reporting, GitGub actions for publishing to npm repository, dependency updates and other goodies.
 
-Easily use this template to quick start a production ready nodejs project template.
+Easily use this module to interact with the ElasticSearch Engine.
+
+# What is ElasticSearch?
+Elasticsearch is a distributed, free and open search and analytics engine for all types of data, including textual, numerical, geospatial, structured, and unstructured. Elasticsearch is built on Apache Lucene and was first released in 2010 by Elasticsearch N.V. (now known as Elastic). Known for its simple REST APIs, distributed nature, speed, and scalability, Elasticsearch is the central component of the Elastic Stack, a set of free and open tools for data ingestion, enrichment, storage, analysis, and visualization. Commonly referred to as the ELK Stack (after Elasticsearch, Logstash, and Kibana), the Elastic Stack now includes a rich collection of lightweight shipping agents known as Beats for sending data to Elasticsearch.
+
+For more details, please refer: https://www.elastic.co/what-is/elasticsearch 
 
 ## Code Guardian
 [![<app> build verification](https://github.com/aicore/template-nodejs/actions/workflows/build_verify.yml/badge.svg)](https://github.com/aicore/template-nodejs/actions/workflows/build_verify.yml)
 
-<a href="https://sonarcloud.io/summary/new_code?id=aicore_template-nodejs-ts">
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=alert_status" alt="Sonar code quality check" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=security_rating" alt="Security rating" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=vulnerabilities" alt="vulnerabilities" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=coverage" alt="Code Coverage" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=bugs" alt="Code Bugs" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=reliability_rating" alt="Reliability Rating" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=sqale_rating" alt="Maintainability Rating" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=ncloc" alt="Lines of Code" />
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_template-nodejs-ts&metric=sqale_index" alt="Technical debt" />
+<a href="https://sonarcloud.io/summary/new_code?id=aicore_elasticsearch-lib">
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_elasticsearch-lib&metric=alert_status" alt="Sonar code quality check" />
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_elasticsearch-lib&metric=security_rating" alt="Security rating" />
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_elasticsearch-lib&metric=vulnerabilities" alt="vulnerabilities" />
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_elasticsearch-lib&metric=coverage" alt="Code Coverage" />
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_elasticsearch-lib&metric=bugs" alt="Code Bugs" />
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_elasticsearch-lib&metric=reliability_rating" alt="Reliability Rating" />
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_elasticsearch-lib&metric=sqale_rating" alt="Maintainability Rating" />
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_elasticsearch-lib&metric=ncloc" alt="Lines of Code" />
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=aicore_elasticsearch-lib&metric=sqale_index" alt="Technical debt" />
 </a>
 
 
-# TODOs after template use
-1. Update package.json with your app defaults
-2. Check Build actions on pull requests.
-3. In sonar cloud, enable Automatic analysis from `Administration
-   Analysis Method` for the first time before a pull request is raised: ![image](https://user-images.githubusercontent.com/5336369/148695840-65585d04-5e59-450b-8794-54ca3c62b9fe.png)
-4. Check codacy runs on pull requests, set codacy defaults. You may remove codacy if sonar cloud is only needed.
-5. Update the above Code Guardian badges; change all `id=aicore_template-nodejs-ts` to the sonar id of your project fields.
+# Usage Instrcution
+
+## Installing
+
+Install it directly using npm by running the command below:
+
+``
+npm i @aicore/template-nodejs
+``
+
+## Prerequisites
+Inorder to use this module, elasticsearch should be installed on the server/local machine. Please refer to the links below:
+
+1. https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html
+2. https://www.linode.com/docs/guides/databases/elasticsearch/
+
+### **List of Available Operations:**
+* createIndices
+* bulkInsert
+* bulkUpdate
+* bulkDelete
+* search
+* get
+
+
+## Code Usage
+
+### **1. createIndices**
+
+Create Index API is used to manually create an index in Elasticsearch. All documents in Elasticsearch are stored inside of one index or another. Please refer API docs for more details.
+* https://www.elastic.co/guide/en/elasticsearch/reference/6.8/indices-create-index.html 
+
+#### **Required Parameters**
+
+ - **nodeAddress (Type: String)**: Complete URL endpoint of the node including port. For e.g http://165.34.23.1:9200/
+ - **mappingObject (Type: JSON Object)**: omposite object according to elastic search standards.
+#### **Example**
+ ```js
+ // import the module directly after installation
+ import searchClient from '@aicore/elasticsearch-lib';
+
+ const indices = {
+        index: indexName,
+        body: {
+            mappings: {
+                extension_registry_beta: {
+                    properties: {
+                        name: { type: 'text' },
+                        title: { type: 'text' },
+                        description: { type: 'text'}
+                    }
+                }
+            }
+        }
+    };
+
+    const indexResponse = await searchClient.createIndices(nodeAddress, indices);
+
+    console.log("Create Index response received :" + JSON.stringify(indexResponse));
+     //Sample log: https://pastebin.com/1e1axYQE
+ 
+ ```
+### **2. bulkInsert/bulkUpdate/bulkDelete**
+
+Performs multiple indexing or delete operations in a single API call. This reduces overhead and can greatly increase indexing speed. Please refer API docs for more details.
+ * https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-bulk.html?spm=a2c4g.11186623.0.0.636e25b7I4qrj1
+
+  
+   #### **Required Parameters**
+
+- **nodeAddress (Type: String)**: Complete URL endpoint of the node including port. For e.g http://165.34.23.1:9200/
+- **indexName (Type: String)**: Unique identifier for index.
+- **datasets (Type: Array)**: Array of data objects for bulk insert.
+
+ **Please Note: The bulkInsert, bulkUpdate and bulkDelete modules all use the same underlying elasticSearch bulk API so the usage is similar to each other.**
+#### **Example**
+
+ ```js
+ //import the module
+ import searchClient from '@aicore/elasticsearch-lib'
+//array of data objects to be inserted
+const dataset = [
+        {
+            name: 'Theme101',
+            title: 'Brackets',
+            description: 'Provides ability to use code snippets in Brackets.',
+            homepage: 'https://github.com/jrowny/brackets-snippets',
+            author: {
+                name: 'demo',
+                email: 'test@gmail.com'
+            }
+        }];
+
+const bulkInsertResponse = await searchClient.bulkInsert(nodeAddress, indexName, dataset);
+
+console.log("Bulk Insert Response " + JSON.stringify(bulkInsertResponse));
+ ```
+
+### **3. search**
+The search API allows you to execute a search query and get back search hits that match the query.Please refer API docs for more details.
+ * https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-search.html
+
+#### **Required Parameters**
+
+- **nodeAddress (Type: String)**: Complete URL endpoint of the node including port. For e.g http://165.34.23.1:9200/
+- **indexName (Type: String)**: Unique identifier for index.
+- **searchQuery (Type: JSON Object)**: containing search parameters. Refer API docs for format
+#### **Example**
+```js
+////import the module
+import searchClient from '@aicore/elasticsearch-lib';
+//composite searchQuery object to retrieve all results
+const searchQuery = {
+        index: indexName,
+        body: {
+            query: {
+                match_all: {}
+            }
+        }
+    };
+
+const searchResponse = await searchClient.search(nodeAddress, indexName, searchQuery);
+```
+### **4. get**
+
+The get API allows to get a typed JSON document from the index based on its id. Please refer API docs for more details.
+ * https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
+
+#### **Required Parameters**
+ - **nodeAddress (Type: String)**: Complete URL endpoint of the node including port. For e.g http://165.34.23.1:9200/
+- **indexName (Type: String)**: Unique identifier for index.
+- **getQuery (Type: JSON Object)**: Composite object containing get parameters. Refer API docs for format
+
+#### **Example**
+```js
+////import the module
+import searchClient from '@aicore/elasticsearch-lib';
+
+const getQuery = {
+    index: 'game-of-thrones',
+    id: '1'
+};
+
+const getResponse = await searchClient.get(nodeAddress, indexName, getQuery);
+
+console.log(getResponse);
+
+```
+
 
 # Commands available
 

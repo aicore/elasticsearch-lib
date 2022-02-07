@@ -11,8 +11,8 @@
 // see: https://github.com/digitalbazaar/bedrock-test/issues/16 . c8 is drop replacement for nyc coverage reporting tool
 /*global describe, it*/
 
-const assert = require('assert');
-const chai = require('chai');
+import * as assert from 'assert';
+import * as chai from 'chai';
 
 let expect = chai.expect;
 

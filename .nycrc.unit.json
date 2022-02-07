@@ -10,10 +10,10 @@
   ],
   "reports-dir": "coverage-unit",
   "include": [
-    "src/**/*.js"
   ],
   "exclude": [
-    "**/*.spec.js"
+    "**/*.spec.js",
+    "src/**/*.js"
   ],
   "branches": 0,
   "lines": 0,

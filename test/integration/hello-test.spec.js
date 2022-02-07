@@ -14,8 +14,8 @@
 // jshint ignore: start
 /*global describe, it*/
 
-const assert = require('assert');
-const chai = require('chai');
+import * as assert from 'assert';
+import * as chai from 'chai';
 
 let expect = chai.expect;
 
