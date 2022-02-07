@@ -1,5 +1,5 @@
-require('array.prototype.flatmap').shim();
-const { Client } = require('@elastic/elasticsearch');
+import { Client } from '@elastic/elasticsearch';
+
 let client = null;
 
 /**
@@ -194,7 +194,7 @@ async function performBulkOperation(client, indexName, body) {
     console.log("Number of records inserted successfully" + JSON.stringify(count));
 }
 
-module.exports = {
+export default {
     createIndices,
     bulkInsert,
     bulkUpdate,
