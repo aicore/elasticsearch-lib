@@ -30,7 +30,7 @@ async function createIndices(nodeAddress, mappingObject) {
     }
 
     client = setUpClient(nodeAddress);
-    return await client.indices.create(mappingObject);
+    return client.indices.create(mappingObject);
 }
 
 /**
@@ -51,8 +51,7 @@ async function bulkInsert(nodeAddress, indexName, datasets, options = null) {
     client = setUpClient(nodeAddress);
     const body = datasets.flatMap(doc =>
         [{ index: { _index: indexName, _type: '_doc' }}, doc]);
-    const response = await performBulkOperation(client, indexName, body);
-    return response;
+    return performBulkOperation(indexName, body);
 }
 
 /**
@@ -75,7 +74,7 @@ async function bulkUpdate(nodeAddress, indexName, datasets, options = null) {
     client = setUpClient(nodeAddress);
     const body = datasets.flatMap(doc =>
         [{ update: { _index: indexName, _type: '_doc' }}, doc]);
-    return await performBulkOperation(client, indexName, body);
+    return performBulkOperation(indexName, body);
 }
 /**
  * Performs multiple indexing or delete operations in a single API call.
@@ -97,7 +96,7 @@ async function bulkDelete(nodeAddress, indexName, datasets, options = null) {
     client = setUpClient(nodeAddress);
     const body = datasets.flatMap(doc =>
         [{ delete: { _index: indexName  }}, doc]);
-    return await performBulkOperation(client, indexName, body);
+    return performBulkOperation(indexName, body);
 }
 
 /**
@@ -154,12 +153,11 @@ async function getRecord(nodeAddress, indexName, getQuery) {
 
 /**
  * Private function for isolating the documents failed to update,index or delete.
- * @param client elastic search client
  * @param indexName Unique identifier for index.
  * @param body Request body(composite object) for bulk operation.
  * @returns {Promise<void>} Response along with error documents.
  */
-async function performBulkOperation(client, indexName, body) {
+async function performBulkOperation(indexName, body) {
     // here we are forcing an index refresh,
     // otherwise we will not get any result
     // in the consequent search
