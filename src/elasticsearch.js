@@ -26,12 +26,11 @@ function setUpClient(nodeAddress) {
  */
 async function createIndices(nodeAddress, mappingObject) {
     if (!nodeAddress || !mappingObject) {
-        throw "Invalid value for parameter : nodeAddress and mappingObject are required parameters.";
+        throw new Error("Invalid value for parameter : nodeAddress and mappingObject are required parameters.");
     }
 
     client = setUpClient(nodeAddress);
-    const result = await client.indices.create(mappingObject);
-    return result;
+    return await client.indices.create(mappingObject);
 }
 
 /**
@@ -47,7 +46,7 @@ async function createIndices(nodeAddress, mappingObject) {
  */
 async function bulkInsert(nodeAddress, indexName, datasets, options = null) {
     if (!nodeAddress || !indexName || !datasets) {
-        throw "Invalid value for parameter : nodeAddress,mappingObject, and datasets are required parameters.";
+        throw new Error("Invalid value for parameter : nodeAddress,mappingObject, and datasets are required parameters.");
     }
     client = setUpClient(nodeAddress);
     const body = datasets.flatMap(doc =>
@@ -70,14 +69,13 @@ async function bulkInsert(nodeAddress, indexName, datasets, options = null) {
 async function bulkUpdate(nodeAddress, indexName, datasets, options = null) {
 
     if (!nodeAddress || !indexName || !datasets) {
-        throw "Invalid value for parameter : nodeAddress,mappingObject, and datasets are required parameters.";
+        throw new Error("Invalid value for parameter : nodeAddress,mappingObject, and datasets are required parameters.");
     }
 
     client = setUpClient(nodeAddress);
     const body = datasets.flatMap(doc =>
         [{ update: { _index: indexName, _type: '_doc' }}, doc]);
-    const response = await performBulkOperation(client, indexName, body);
-    return response;
+    return await performBulkOperation(client, indexName, body);
 }
 /**
  * Performs multiple indexing or delete operations in a single API call.
@@ -93,14 +91,13 @@ async function bulkUpdate(nodeAddress, indexName, datasets, options = null) {
 async function bulkDelete(nodeAddress, indexName, datasets, options = null) {
 
     if (!nodeAddress || !indexName || !datasets) {
-        throw "Invalid value for parameter : nodeAddress,mappingObject, and datasets are required parameters.";
+        throw new Error("Invalid value for parameter : nodeAddress,mappingObject, and datasets are required parameters.");
     }
 
     client = setUpClient(nodeAddress);
     const body = datasets.flatMap(doc =>
         [{ delete: { _index: indexName  }}, doc]);
-    const response = await performBulkOperation(client, indexName, body);
-    return response;
+    return await performBulkOperation(client, indexName, body);
 }
 
 /**
@@ -115,15 +112,14 @@ async function bulkDelete(nodeAddress, indexName, datasets, options = null) {
 async function search(nodeAddress, indexName, searchQuery) {
 
     if (!nodeAddress || !indexName || !searchQuery) {
-        throw "Invalid value for parameter : nodeAddress,mappingObject, and searchQuery are required parameters.";
+        throw new Error("Invalid value for parameter : nodeAddress,mappingObject, and searchQuery are required parameters.");
     }
 
     client = setUpClient(nodeAddress);
     const { body } = await client.search(searchQuery);
     if (!body || body.error) {
         const errorMsg = "Search query failed with the following error : " + JSON.stringify(body.error);
-        console.log(errorMsg);
-        throw errorMsg;
+        throw new Error(errorMsg);
     }
     if (body.hits && body.hits.hits) {
         console.log("Search Results Retrieve successfully" + JSON.stringify(body.hits.hits));
@@ -143,14 +139,13 @@ async function search(nodeAddress, indexName, searchQuery) {
 async function getRecord(nodeAddress, indexName, getQuery) {
 
     if (!nodeAddress || !indexName || !getQuery) {
-        throw "Invalid value for parameter : nodeAddress,mappingObject, and getQuery are required parameters.";
+        throw new Error("Invalid value for parameter : nodeAddress,mappingObject, and getQuery are required parameters.");
     }
 
     const { body } = await client.get(getQuery);
     if (!body || body.error) {
         const errorMsg = "Get query failed with the following error : " + body.error;
-        console.log(errorMsg);
-        throw errorMsg;
+        throw new Error(errorMsg);
     }
 
     console.log("Results Retrieve successfully" + JSON.stringify(body));
