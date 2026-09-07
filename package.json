@@ -49,7 +49,7 @@
     "mocha": "9.2.2"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "8.6.0",
+    "@elastic/elasticsearch": "9.5.1",
     "config": "3.3.9"
   }
 }
